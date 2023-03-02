@@ -1,0 +1,113 @@
+SELECT CITY, LENGTH(CITY) as CITY_LENGTH
+FROM STATION
+ORDER BY LENGTH(CITY) ASC, CITY ASC
+LIMIT 1;
+SELECT CITY, LENGTH(CITY) as CITY_LENGTH
+FROM STATION
+ORDER BY LENGTH(CITY) DESC, CITY ASC
+LIMIT 1;
+//finding max length and min length;
+
+//start with vowel and end with vowel-:
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY like 'A%' and city like'%a' or city like 'E%' and city like '%e' or city like 'I%' and city like '%i' or city like 'O%' and city like '%o' or city like 'U%' and city like '%u';
+//Right Query
+SELECT DISTINCT CITY FROM STATION WHERE (CITY LIKE 'A%' OR CITY LIKE 'E%' OR CITY LIKE 'I%' OR CITY LIKE 'O%' OR CITY LIKE 'U%') AND (CITY LIKE '%a' OR CITY LIKE '%e' OR CITY LIKE '%i' OR CITY LIKE '%o' OR CITY LIKE '%u') order by city;
+
+
+SELECT DISTINCT CITY FROM STATION WHERE (CITY NOT LIKE 'A%' AND CITY NOT LIKE 'E%' AND CITY NOT LIKE 'I%' AND CITY NOT LIKE 'O%' AND CITY NOT LIKE 'U%') AND (CITY NOT LIKE '%a' AND CITY NOT LIKE '%e' AND CITY NOT LIKE '%i' AND CITY NOT LIKE '%o' AND CITY NOT LIKE '%u') order by city;
+
+order by last three character-:
+SELECT Name
+FROM STUDENTS
+WHERE Marks > 75
+ORDER BY RIGHT(Name, 3) ASC, ID ASC;
+Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. Output one of the following statements for each record in the table:
+
+Equilateral: It's a triangle with  sides of equal length.
+Isosceles: It's a triangle with  sides of equal length.
+Scalene: It's a triangle with  sides of differing lengths.
+Not A Triangle: The given values of A, B, and C don't form a triangle.
+Input Format
+
+The TRIANGLES table is described as follows:
+
+
+
+Each row in the table denotes the lengths of each of a triangle's three sides.
+
+Sample Input
+
+
+
+Sample Output
+
+Isosceles
+Equilateral
+Scalene
+Not A Triangle
+Explanation
+
+Values in the tuple  form an Isosceles triangle, because .
+Values in the tuple  form an Equilateral triangle, because . Values in the tuple  form a Scalene triangle, because .
+Values in the tuple  cannot form a triangle because the combined value of sides  and  is not larger than that of side .
+
+SELECT 
+    CASE 
+        WHEN A + B <= C OR A + C <= B OR B + C <= A THEN 'Not A Triangle'
+        WHEN A = B AND B = C THEN 'Equilateral'
+        WHEN A = B OR A = C OR B = C THEN 'Isosceles'
+        ELSE 'Scalene' 
+    END AS 'Triangle Type'
+FROM TRIANGLES;
+/// actors
+Pivot the Occupation column in OCCUPATIONS so that each Name is sorted alphabetically and displayed underneath its corresponding Occupation. The output column headers should be Doctor, Professor, Singer, and Actor, respectively.
+
+Note: Print NULL when there are no more names corresponding to an occupation.
+
+Input Format
+
+The OCCUPATIONS table is described as follows:
+
+
+
+Occupation will only contain one of the following values: Doctor, Professor, Singer or Actor.
+
+Sample Input
+
+
+
+Sample Output
+
+Jenny    Ashley     Meera  Jane
+Samantha Christeen  Priya  Julia
+NULL     Ketty      NULL   Maria
+Explanation
+
+The first column is an alphabetically ordered list of Doctor names.
+The second column is an alphabetically ordered list of Professor names.
+The third column is an alphabetically ordered list of Singer names.
+The fourth column is an alphabetically ordered list of Actor names.
+The empty cell data for columns with less than the maximum number of names per occupation (in this case, the Professor and Actor columns) are filled with NULL values.
+
+WITH max_rows_num AS (
+    SELECT MAX(cnt) as max_rows
+    FROM (SELECT COUNT(*) as cnt FROM OCCUPATIONS GROUP BY Occupation) as sub
+),
+pivot_data AS (
+    SELECT
+        Name,
+        Occupation,
+        ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) as rn
+    FROM OCCUPATIONS
+)
+SELECT 
+    MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) AS Doctor,
+    MAX(CASE WHEN Occupation = 'Professor' THEN Name END) AS Professor,
+    MAX(CASE WHEN Occupation = 'Singer' THEN Name END) AS Singer,
+    MAX(CASE WHEN Occupation = 'Actor' THEN Name END) AS Actor
+FROM pivot_data
+CROSS JOIN max_rows_num
+GROUP BY rn
+ORDER BY rn;

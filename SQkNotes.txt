@@ -1,0 +1,48 @@
+SQL INTERVIEW QUESTIONS-
+
+SQL- Sructred query Language,
+
+Constraints-
+can be used to specify the limit on the data type of table. Constraint can be SPECIFIED while creating or altering the table statement, ex-
+NOT NULL,
+CHECK
+DEFAULT,
+UNIQUE,
+PRIMARY KEY,
+FOREIGN KEY.
+
+-----------------------SQL------------------------
+|                    |                       |                         |
+DML         DDL                DCL                  TCL
+select,        create            grant          Begin-
+insert         alter              Revoke          trans
+update,      drop                                commit
+delete                                               Roll Back
+
+
+PRIMARY KEY-
+A primary key is used to uniquely identify all table records.
+It cannot have Null Values,It must contain unique values.
+A table can have only one Primary key that consists of single or multiple fields.
+
+ex- Create table employee(
+ID int Not null,
+Employee_name varchar(255) NOt null,
+employee_desig varchar(255),
+Employee_age int,
+primary key(ID)
+);
+
+Foreign Key -: A primary key which refers to another table 
+
+Foreign key(Person Id) references Persons(personId);
+
+Diff Between Delete And Truncate-:
+Delete- This Query is Used  to delete or Remove one or more Existing Tables.
+Truncate-: This statement deletes all the data from inside a table.
+
+Delete from table name
+[where condtion]
+
+Truncate Table
+Table_name;
